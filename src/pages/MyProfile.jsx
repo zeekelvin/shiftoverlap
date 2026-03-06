@@ -30,6 +30,7 @@ const INTERESTS = [
 ];
 
 export default function MyProfile() {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [currentUser, setCurrentUser] = useState(null);
   const [form, setForm] = useState(null);
