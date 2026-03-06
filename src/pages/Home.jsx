@@ -324,21 +324,21 @@ export default function Home() {
                 title: "Schedule-Based Matching",
                 desc: "We calculate your exact free-time overlap with every match. See who's free when you are — before you even swipe.",
                 color: "from-[#FF6B35] to-[#FF8F5E]",
-                img: "https://images.unsplash.com/photo-1551836022-deb4988cc6c0?w=400&q=80",
+                img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&q=80",
               },
               {
                 icon: Users,
                 title: "For Shift Workers Only",
                 desc: "Everyone here understands the exhaustion, weird sleep patterns, and missed holidays. You're finally among your people.",
                 color: "from-[#1B2A4A] to-[#2d4270]",
-                img: "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=400&q=80",
+                img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80",
               },
               {
                 icon: Zap,
                 title: "Instant Date Planning",
                 desc: "See your shared free windows. Book that coffee on your mutual Tuesday morning off in two taps.",
                 color: "from-violet-500 to-purple-600",
-                img: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=400&q=80",
+                img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&q=80",
               },
             ].map((feature, i) => (
               <motion.div
