@@ -52,6 +52,7 @@ import Discover from './pages/Discover';
 import Matches from './pages/Matches';
 import Messages from './pages/Messages';
 import MyProfile from './pages/MyProfile';
+import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
@@ -65,4 +66,5 @@ export const PAGES = {
 export const pagesConfig = {
     mainPage: "Home",
     Pages: PAGES,
+    Layout: __Layout,
 };
