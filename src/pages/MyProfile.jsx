@@ -107,8 +107,18 @@ export default function MyProfile() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white pb-32">
       <div className="max-w-lg mx-auto px-4 pt-6 space-y-6">
-        <div className="text-center">
+        <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold text-[#1B2A4A]">My Profile</h1>
+          {profile?.id && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate(createPageUrl(`ViewProfile?id=${profile.id}`))}
+              className="text-[#FF6B35] border-orange-200 rounded-full"
+            >
+              <Eye className="w-4 h-4 mr-1" /> Preview
+            </Button>
+          )}
         </div>
 
         {/* Photos */}
