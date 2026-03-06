@@ -76,6 +76,14 @@ export default function ProfileCard({ profile, mySchedule, onLike, onPass, onSup
               ))}
             </div>
           )}
+
+          {/* View full profile */}
+          <button
+            onClick={() => navigate(createPageUrl(`ViewProfile?id=${profile.id}`))}
+            className="w-full flex items-center justify-center gap-1 text-xs text-[#FF6B35] font-semibold py-1 hover:underline"
+          >
+            View full profile <ChevronRight className="w-3.5 h-3.5" />
+          </button>
         </div>
       </div>
 
