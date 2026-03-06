@@ -420,7 +420,7 @@ export default function Home() {
       {/* ── CTA ── */}
       <div className="relative overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1529271230144-e8c648ef570d?w=1600&q=80"
+          src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=1600&q=80"
           alt=""
           className="absolute inset-0 w-full h-full object-cover"
         />
