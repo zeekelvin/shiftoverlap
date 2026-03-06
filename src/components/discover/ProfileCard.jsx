@@ -2,7 +2,7 @@ import React from "react";
 import { MapPin, Briefcase } from "lucide-react";
 import ProfessionBadge from "../shared/ProfessionBadge";
 import ShiftBadge from "../shared/ShiftBadge";
-import { ScheduleOverlapIndicator } from "../shared/ScheduleOverlapIndicator";
+import ScheduleOverlapIndicator from "../shared/ScheduleOverlapIndicator";
 
 export default function ProfileCard({ profile, mySchedule, onLike, onPass, onSuperLike }) {
   return (
