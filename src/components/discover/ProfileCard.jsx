@@ -1,5 +1,7 @@
 import React from "react";
-import { MapPin, Briefcase } from "lucide-react";
+import { MapPin, ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { createPageUrl } from "@/utils";
 import ProfessionBadge from "../shared/ProfessionBadge";
 import ShiftBadge from "../shared/ShiftBadge";
 import ScheduleOverlapIndicator from "../shared/ScheduleOverlapIndicator";
