@@ -59,11 +59,13 @@ const PROFILES = [
 ];
 
 const COUPLE_PHOTOS = [
-  "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800&q=80",
-  "https://images.unsplash.com/photo-1529636798458-92182e662485?w=800&q=80",
-  "https://images.unsplash.com/photo-1474552226712-ac0f0961a954?w=800&q=80",
-  "https://images.unsplash.com/photo-1504730655501-4c45b57b3a89?w=800&q=80",
-  "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=800&q=80",
+  "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80",
+  "https://images.unsplash.com/photo-1519742866993-66d3cfef4bbd?w=800&q=80",
+  "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&q=80",
+  "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&q=80",
+  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80",
+  "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=800&q=80",
+  "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80",
 ];
 
 const TESTIMONIALS = [
