@@ -50,12 +50,14 @@
 import Home from './pages/Home';
 import Discover from './pages/Discover';
 import Matches from './pages/Matches';
+import Messages from './pages/Messages';
 
 
 export const PAGES = {
     "Home": Home,
     "Discover": Discover,
     "Matches": Matches,
+    "Messages": Messages,
 }
 
 export const pagesConfig = {
