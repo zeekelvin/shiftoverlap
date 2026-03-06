@@ -51,6 +51,7 @@ import Home from './pages/Home';
 import Discover from './pages/Discover';
 import Matches from './pages/Matches';
 import Messages from './pages/Messages';
+import MyProfile from './pages/MyProfile';
 
 
 export const PAGES = {
@@ -58,6 +59,7 @@ export const PAGES = {
     "Discover": Discover,
     "Matches": Matches,
     "Messages": Messages,
+    "MyProfile": MyProfile,
 }
 
 export const pagesConfig = {
