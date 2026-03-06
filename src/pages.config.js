@@ -49,11 +49,13 @@
  */
 import Home from './pages/Home';
 import Discover from './pages/Discover';
+import Matches from './pages/Matches';
 
 
 export const PAGES = {
     "Home": Home,
     "Discover": Discover,
+    "Matches": Matches,
 }
 
 export const pagesConfig = {
