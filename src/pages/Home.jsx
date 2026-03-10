@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Clock, Heart, Users, ArrowRight, Shield, Zap, Calendar, Star, ChevronLeft, ChevronRight } from "lucide-react";
 import LogoBrand from "../components/shared/LogoBrand";
