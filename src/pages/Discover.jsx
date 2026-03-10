@@ -227,3 +227,7 @@ function DiscoverInner() {
     </div>
   );
 }
+
+export default function Discover() {
+  return <RequireAuth><DiscoverInner /></RequireAuth>;
+}
