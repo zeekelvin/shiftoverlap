@@ -210,30 +210,15 @@ export default function MyProfile() {
 
         {/* Schedule */}
         <Card>
-          <CardHeader><CardTitle className="text-base">My Availability</CardTitle></CardHeader>
-          <CardContent className="space-y-3">
-            {DAYS.map((day, di) => (
-              <div key={day} className="space-y-1.5">
-                <Label className="text-xs text-slate-500 uppercase tracking-wider">{DAY_LABELS[di]}</Label>
-                <div className="flex gap-2 flex-wrap">
-                  {TIME_BLOCKS.map((block) => {
-                    const active = form.weekly_schedule?.[day]?.includes(block.key);
-                    return (
-                      <button
-                        key={block.key}
-                        type="button"
-                        onClick={() => toggleScheduleSlot(day, block.key)}
-                        className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
-                          active ? block.color + " border-current shadow-sm" : "bg-white text-slate-400 border-slate-200"
-                        }`}
-                      >
-                        {block.label}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
+          <CardHeader>
+            <CardTitle className="text-base">My Availability</CardTitle>
+            <p className="text-xs text-slate-400 mt-0.5">Tap or drag cells to mark when you're free</p>
+          </CardHeader>
+          <CardContent>
+            <WeeklyCalendar
+              schedule={form.weekly_schedule || {}}
+              onChange={(newSchedule) => update("weekly_schedule", newSchedule)}
+            />
           </CardContent>
         </Card>
 
