@@ -15,14 +15,7 @@ import ShiftBadge, { SHIFT_MAP } from "../components/shared/ShiftBadge";
 import WeeklyCalendar from "../components/shared/WeeklyCalendar";
 import { toast } from "sonner";
 
-const DAYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
-const DAY_LABELS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-const TIME_BLOCKS = [
-  { key: "morning", label: "Morning", color: "bg-amber-100 text-amber-700 border-amber-300" },
-  { key: "afternoon", label: "Afternoon", color: "bg-orange-100 text-orange-700 border-orange-300" },
-  { key: "evening", label: "Evening", color: "bg-violet-100 text-violet-700 border-violet-300" },
-  { key: "night", label: "Night", color: "bg-indigo-100 text-indigo-700 border-indigo-300" },
-];
+
 
 const INTERESTS = [
   "Fitness", "Cooking", "Reading", "Hiking", "Movies", "Music", "Travel", "Gaming",
