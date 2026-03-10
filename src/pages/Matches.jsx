@@ -10,10 +10,29 @@ import { computeOverlap } from "../components/shared/ScheduleOverlapIndicator";
 export default function Matches() {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(null);
+  const [conversations, setConversations] = useState([]);
 
   useEffect(() => {
-    base44.auth.me().then(setCurrentUser);
+    base44.auth.me().then(async (user) => {
+      setCurrentUser(user);
+      const all = await base44.entities.Conversation.list();
+      setConversations(all.filter((c) => c.participant_emails?.includes(user.email)));
+    });
   }, []);
+
+  const openChat = async (profile) => {
+    if (!currentUser?.email) return;
+    const existing = conversations.find(
+      (c) => c.participant_emails?.includes(currentUser.email) && c.participant_emails?.includes(profile.user_email)
+    );
+    let conv = existing;
+    if (!conv) {
+      conv = await base44.entities.Conversation.create({
+        participant_emails: [currentUser.email, profile.user_email],
+      });
+    }
+    navigate(createPageUrl(`Messages?conversationId=${conv.id}`));
+  };
 
   const { data: myProfiles } = useQuery({
     queryKey: ["myProfile", currentUser?.email],
