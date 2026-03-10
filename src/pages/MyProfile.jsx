@@ -50,19 +50,6 @@ export default function MyProfile() {
 
   const update = (key, value) => setForm((f) => ({ ...f, [key]: value }));
 
-  const toggleScheduleSlot = (day, block) => {
-    setForm((f) => {
-      const schedule = { ...(f.weekly_schedule || {}) };
-      const daySlots = schedule[day] || [];
-      if (daySlots.includes(block)) {
-        schedule[day] = daySlots.filter((s) => s !== block);
-      } else {
-        schedule[day] = [...daySlots, block];
-      }
-      return { ...f, weekly_schedule: schedule };
-    });
-  };
-
   const toggleInterest = (interest) => {
     setForm((f) => ({
       ...f,
