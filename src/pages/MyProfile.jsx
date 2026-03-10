@@ -88,8 +88,9 @@ export default function MyProfile() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white pb-32">
-      <div className="max-w-lg mx-auto px-4 pt-6 space-y-6">
-        <div className="flex items-center justify-between">
+      <div className="max-w-lg mx-auto px-4 pt-6">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-5">
           <h1 className="text-2xl font-bold text-[#1B2A4A]">My Profile</h1>
           {profile?.id && (
             <Button
@@ -103,148 +104,258 @@ export default function MyProfile() {
           )}
         </div>
 
-        {/* Photos */}
-        <Card>
-          <CardHeader><CardTitle className="text-base">Photos</CardTitle></CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-3 gap-3">
-              {form.photo_urls?.map((url, i) => (
-                <div key={i} className="relative aspect-square rounded-2xl overflow-hidden group">
-                  <img src={url} alt="" className="w-full h-full object-cover" />
+        <Tabs defaultValue="profile">
+          <TabsList className="w-full mb-6 bg-slate-100 rounded-xl p-1">
+            <TabsTrigger value="profile" className="flex-1 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
+              <User className="w-4 h-4 mr-1.5" /> Profile
+            </TabsTrigger>
+            <TabsTrigger value="settings" className="flex-1 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">
+              <Settings className="w-4 h-4 mr-1.5" /> Settings
+            </TabsTrigger>
+          </TabsList>
+
+          {/* ── PROFILE TAB ── */}
+          <TabsContent value="profile" className="space-y-6">
+            {/* Photos */}
+            <Card>
+              <CardHeader><CardTitle className="text-base">Photos</CardTitle></CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-3 gap-3">
+                  {form.photo_urls?.map((url, i) => (
+                    <div key={i} className="relative aspect-square rounded-2xl overflow-hidden group">
+                      <img src={url} alt="" className="w-full h-full object-cover" />
+                      <button
+                        onClick={() => update("photo_urls", form.photo_urls.filter((_, j) => j !== i))}
+                        className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  ))}
+                  {(form.photo_urls?.length || 0) < 6 && (
+                    <label className="aspect-square rounded-2xl border-2 border-dashed border-slate-300 flex flex-col items-center justify-center cursor-pointer hover:border-[#FF6B35] transition-colors">
+                      <Camera className="w-5 h-5 text-slate-400" />
+                      <input type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} />
+                    </label>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Basics */}
+            <Card>
+              <CardHeader><CardTitle className="text-base">About Me</CardTitle></CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>Display Name</Label>
+                    <Input value={form.display_name || ""} onChange={(e) => update("display_name", e.target.value)} className="mt-1" />
+                  </div>
+                  <div>
+                    <Label>Age</Label>
+                    <Input type="number" value={form.age || ""} onChange={(e) => update("age", Number(e.target.value))} className="mt-1" />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>Gender</Label>
+                    <Select value={form.gender || ""} onValueChange={(v) => update("gender", v)}>
+                      <SelectTrigger className="mt-1"><SelectValue placeholder="Select" /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="male">Man</SelectItem>
+                        <SelectItem value="female">Woman</SelectItem>
+                        <SelectItem value="non_binary">Non-binary</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label>Looking For</Label>
+                    <Select value={form.looking_for || ""} onValueChange={(v) => update("looking_for", v)}>
+                      <SelectTrigger className="mt-1"><SelectValue placeholder="Select" /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="male">Men</SelectItem>
+                        <SelectItem value="female">Women</SelectItem>
+                        <SelectItem value="everyone">Everyone</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div>
+                  <Label>Bio</Label>
+                  <Textarea value={form.bio || ""} onChange={(e) => update("bio", e.target.value)} className="mt-1 h-20" placeholder="Tell people about yourself..." />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>City</Label>
+                    <Input value={form.city || ""} onChange={(e) => update("city", e.target.value)} className="mt-1" />
+                  </div>
+                  <div>
+                    <Label>State</Label>
+                    <Input value={form.state || ""} onChange={(e) => update("state", e.target.value)} className="mt-1" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Career */}
+            <Card>
+              <CardHeader><CardTitle className="text-base">Work & Shifts</CardTitle></CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label>Profession</Label>
+                  <Select value={form.profession || ""} onValueChange={(v) => update("profession", v)}>
+                    <SelectTrigger className="mt-1"><SelectValue placeholder="Select" /></SelectTrigger>
+                    <SelectContent>
+                      {Object.entries(PROFESSION_MAP).map(([key, val]) => (
+                        <SelectItem key={key} value={key}>{val.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Shift Pattern</Label>
+                  <Select value={form.shift_pattern || ""} onValueChange={(v) => update("shift_pattern", v)}>
+                    <SelectTrigger className="mt-1"><SelectValue placeholder="Select" /></SelectTrigger>
+                    <SelectContent>
+                      {Object.entries(SHIFT_MAP).map(([key, val]) => (
+                        <SelectItem key={key} value={key}>{val.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Schedule */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">My Availability</CardTitle>
+                <p className="text-xs text-slate-400 mt-0.5">Tap or drag cells to mark when you're free</p>
+              </CardHeader>
+              <CardContent>
+                <WeeklyCalendar
+                  schedule={form.weekly_schedule || {}}
+                  onChange={(newSchedule) => update("weekly_schedule", newSchedule)}
+                />
+              </CardContent>
+            </Card>
+
+            {/* Interests */}
+            <Card>
+              <CardHeader><CardTitle className="text-base">Interests</CardTitle></CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-2">
+                  {INTERESTS.map((interest) => {
+                    const active = form.interests?.includes(interest);
+                    return (
+                      <button
+                        key={interest}
+                        type="button"
+                        onClick={() => toggleInterest(interest)}
+                        className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
+                          active ? "bg-[#FF6B35] text-white border-[#FF6B35]" : "bg-white text-slate-500 border-slate-200"
+                        }`}
+                      >
+                        {interest}
+                      </button>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Button
+              onClick={() => saveMutation.mutate()}
+              disabled={saveMutation.isPending}
+              className="w-full bg-gradient-to-r from-[#FF6B35] to-[#FF8F5E] text-white h-12 rounded-xl"
+            >
+              {saveMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Save className="w-4 h-4 mr-2" />}
+              Save Profile
+            </Button>
+          </TabsContent>
+
+          {/* ── SETTINGS TAB ── */}
+          <TabsContent value="settings" className="space-y-6">
+            {/* Account Info */}
+            <Card>
+              <CardHeader><CardTitle className="text-base">Account</CardTitle></CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label className="text-slate-500 text-xs">Full Name</Label>
+                  <p className="mt-1 font-medium text-slate-800">{currentUser?.full_name || "—"}</p>
+                </div>
+                <div>
+                  <Label className="text-slate-500 text-xs">Email Address</Label>
+                  <p className="mt-1 font-medium text-slate-800">{currentUser?.email || "—"}</p>
+                </div>
+                <div>
+                  <Label className="text-slate-500 text-xs">Member Since</Label>
+                  <p className="mt-1 font-medium text-slate-800">
+                    {currentUser?.created_date
+                      ? new Date(currentUser.created_date).toLocaleDateString("en-US", { month: "long", year: "numeric" })
+                      : "—"}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Privacy */}
+            <Card>
+              <CardHeader><CardTitle className="text-base">Privacy & Discovery</CardTitle></CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between py-1">
+                  <div>
+                    <p className="text-sm font-medium text-slate-700">Show me in Discover</p>
+                    <p className="text-xs text-slate-400">Others can find your profile</p>
+                  </div>
                   <button
-                    onClick={() => update("photo_urls", form.photo_urls.filter((_, j) => j !== i))}
-                    className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                    type="button"
+                    onClick={() => update("is_complete", !form.is_complete)}
+                    className={`relative w-11 h-6 rounded-full transition-colors ${form.is_complete ? "bg-[#FF6B35]" : "bg-slate-200"}`}
                   >
-                    <X className="w-3 h-3" />
+                    <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${form.is_complete ? "translate-x-5" : ""}`} />
                   </button>
                 </div>
-              ))}
-              {(form.photo_urls?.length || 0) < 6 && (
-                <label className="aspect-square rounded-2xl border-2 border-dashed border-slate-300 flex flex-col items-center justify-center cursor-pointer hover:border-[#FF6B35] transition-colors">
-                  <Camera className="w-5 h-5 text-slate-400" />
-                  <input type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} />
-                </label>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
 
-        {/* Basics */}
-        <Card>
-          <CardHeader><CardTitle className="text-base">About Me</CardTitle></CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label>Display Name</Label>
-                <Input value={form.display_name || ""} onChange={(e) => update("display_name", e.target.value)} className="mt-1" />
-              </div>
-              <div>
-                <Label>Age</Label>
-                <Input type="number" value={form.age || ""} onChange={(e) => update("age", Number(e.target.value))} className="mt-1" />
-              </div>
-            </div>
-            <div>
-              <Label>Bio</Label>
-              <Textarea value={form.bio || ""} onChange={(e) => update("bio", e.target.value)} className="mt-1 h-20" />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label>City</Label>
-                <Input value={form.city || ""} onChange={(e) => update("city", e.target.value)} className="mt-1" />
-              </div>
-              <div>
-                <Label>State</Label>
-                <Input value={form.state || ""} onChange={(e) => update("state", e.target.value)} className="mt-1" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            {/* Subscription */}
+            <Card className="border-orange-100 bg-gradient-to-br from-orange-50 to-rose-50">
+              <CardHeader><CardTitle className="text-base text-[#1B2A4A]">Subscription</CardTitle></CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-semibold text-slate-700 capitalize">{form.subscription_tier || "free"} plan</p>
+                    <p className="text-xs text-slate-400 mt-0.5">
+                      {form.subscription_tier === "free" ? "Upgrade for unlimited likes & more" : "Active subscription"}
+                    </p>
+                  </div>
+                  {form.subscription_tier === "free" && (
+                    <Button size="sm" className="bg-gradient-to-r from-[#FF6B35] to-[#FF8F5E] text-white rounded-full shadow-md">
+                      Upgrade
+                    </Button>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
 
-        {/* Career */}
-        <Card>
-          <CardHeader><CardTitle className="text-base">Work & Shifts</CardTitle></CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <Label>Profession</Label>
-              <Select value={form.profession || ""} onValueChange={(v) => update("profession", v)}>
-                <SelectTrigger className="mt-1"><SelectValue placeholder="Select" /></SelectTrigger>
-                <SelectContent>
-                  {Object.entries(PROFESSION_MAP).map(([key, val]) => (
-                    <SelectItem key={key} value={key}>{val.label}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label>Shift Pattern</Label>
-              <Select value={form.shift_pattern || ""} onValueChange={(v) => update("shift_pattern", v)}>
-                <SelectTrigger className="mt-1"><SelectValue placeholder="Select" /></SelectTrigger>
-                <SelectContent>
-                  {Object.entries(SHIFT_MAP).map(([key, val]) => (
-                    <SelectItem key={key} value={key}>{val.label}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Schedule */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">My Availability</CardTitle>
-            <p className="text-xs text-slate-400 mt-0.5">Tap or drag cells to mark when you're free</p>
-          </CardHeader>
-          <CardContent>
-            <WeeklyCalendar
-              schedule={form.weekly_schedule || {}}
-              onChange={(newSchedule) => update("weekly_schedule", newSchedule)}
-            />
-          </CardContent>
-        </Card>
-
-        {/* Interests */}
-        <Card>
-          <CardHeader><CardTitle className="text-base">Interests</CardTitle></CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-2">
-              {INTERESTS.map((interest) => {
-                const active = form.interests?.includes(interest);
-                return (
-                  <button
-                    key={interest}
-                    type="button"
-                    onClick={() => toggleInterest(interest)}
-                    className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
-                      active ? "bg-[#FF6B35] text-white border-[#FF6B35]" : "bg-white text-slate-500 border-slate-200"
-                    }`}
-                  >
-                    {interest}
-                  </button>
-                );
-              })}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Actions */}
-        <div className="space-y-3">
-          <Button
-            onClick={() => saveMutation.mutate()}
-            disabled={saveMutation.isPending}
-            className="w-full bg-gradient-to-r from-[#FF6B35] to-[#FF8F5E] text-white h-12 rounded-xl"
-          >
-            {saveMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Save className="w-4 h-4 mr-2" />}
-            Save Changes
-          </Button>
-          <Button
-            variant="ghost"
-            onClick={() => base44.auth.logout()}
-            className="w-full text-slate-400 h-12"
-          >
-            <LogOut className="w-4 h-4 mr-2" /> Log Out
-          </Button>
-        </div>
+            {/* Danger zone */}
+            <Card className="border-red-100">
+              <CardHeader><CardTitle className="text-base text-red-500">Sign Out</CardTitle></CardHeader>
+              <CardContent>
+                <p className="text-sm text-slate-400 mb-4">You'll need to sign in again to access your account.</p>
+                <Button
+                  variant="outline"
+                  onClick={() => base44.auth.logout()}
+                  className="w-full border-red-200 text-red-500 hover:bg-red-50 h-11 rounded-xl"
+                >
+                  <LogOut className="w-4 h-4 mr-2" /> Sign Out
+                </Button>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
