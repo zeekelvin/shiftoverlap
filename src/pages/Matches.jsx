@@ -88,12 +88,14 @@ export default function Matches() {
                 : null;
 
               return (
-                <button
+                <div
                   key={profile.id}
-                  onClick={() => navigate(createPageUrl("Messages"))}
                   className="bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-md transition-shadow text-left"
                 >
-                  <div className="aspect-square overflow-hidden">
+                  <div
+                    className="aspect-square overflow-hidden cursor-pointer"
+                    onClick={() => navigate(createPageUrl(`ViewProfile?id=${profile.id}`))}
+                  >
                     {profile.photo_urls?.[0] ? (
                       <img src={profile.photo_urls[0]} alt="" className="w-full h-full object-cover" />
                     ) : (
@@ -117,8 +119,14 @@ export default function Matches() {
                         {overlap.percentage}% overlap
                       </div>
                     )}
+                    <button
+                      onClick={() => openChat(profile)}
+                      className="mt-2 w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg bg-orange-50 text-[#FF6B35] text-xs font-semibold hover:bg-orange-100 transition-colors"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5" /> Message
+                    </button>
                   </div>
-                </button>
+                </div>
               );
             })}
           </div>
