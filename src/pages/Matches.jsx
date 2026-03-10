@@ -8,7 +8,7 @@ import { Loader2, Heart, Clock, MessageCircle } from "lucide-react";
 import ProfessionBadge from "../components/shared/ProfessionBadge";
 import { computeOverlap } from "../components/shared/ScheduleOverlapIndicator";
 
-export default function Matches() {
+function MatchesInner() {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(null);
   const [conversations, setConversations] = useState([]);
