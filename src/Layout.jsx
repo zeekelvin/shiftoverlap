@@ -14,6 +14,7 @@ const NAV_ITEMS = [
 const PAGES_WITHOUT_NAV = ["Home"];
 
 export default function Layout({ children, currentPageName }) {
+  React.useEffect(() => { document.title = "ShiftOverlap"; }, []);
   const [isAuth, setIsAuth] = useState(false);
   const [currentEmail, setCurrentEmail] = useState(null);
   const [hasUnread, setHasUnread] = useState(false);
