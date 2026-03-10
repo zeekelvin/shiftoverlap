@@ -230,6 +230,13 @@ export default function ViewProfile() {
               Pass
             </Button>
             <Button
+              variant="outline"
+              className="h-12 px-4 rounded-xl border-[#FF6B35] text-[#FF6B35] hover:bg-orange-50"
+              onClick={handleMessage}
+            >
+              <MessageCircle className="w-4 h-4" />
+            </Button>
+            <Button
               className="flex-1 h-12 rounded-xl bg-gradient-to-r from-[#FF6B35] to-[#FF8F5E] text-white font-bold shadow-lg shadow-orange-200"
             >
               <Heart className="w-4 h-4 mr-2" /> Like
