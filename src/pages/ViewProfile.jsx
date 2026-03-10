@@ -54,6 +54,23 @@ export default function ViewProfile() {
   const overlapPct = myProfile && profile ? computeOverlap(myProfile.weekly_schedule, profile.weekly_schedule) : null;
   const photos = profile.photo_urls?.length ? profile.photo_urls : [];
 
+  const handleMessage = async () => {
+    if (!currentUser?.email || !profile.user_email) return;
+    // Find existing conversation or create one
+    const all = await base44.entities.Conversation.list();
+    const existing = all.find((c) =>
+      c.participant_emails?.includes(currentUser.email) &&
+      c.participant_emails?.includes(profile.user_email)
+    );
+    let conv = existing;
+    if (!conv) {
+      conv = await base44.entities.Conversation.create({
+        participant_emails: [currentUser.email, profile.user_email],
+      });
+    }
+    navigate(createPageUrl(`Messages?conversationId=${conv.id}`));
+  };
+
   return (
     <div className="min-h-screen bg-white pb-32">
       {/* Photo Hero */}
