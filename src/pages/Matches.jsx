@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Loader2, Heart, Clock } from "lucide-react";
+import { Loader2, Heart, Clock, MessageCircle } from "lucide-react";
 import ProfessionBadge from "../components/shared/ProfessionBadge";
 import { computeOverlap } from "../components/shared/ScheduleOverlapIndicator";
 
