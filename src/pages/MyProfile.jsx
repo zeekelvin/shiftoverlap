@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import ProfessionBadge, { PROFESSION_MAP } from "../components/shared/ProfessionBadge";
 import ShiftBadge, { SHIFT_MAP } from "../components/shared/ShiftBadge";
+import WeeklyCalendar from "../components/shared/WeeklyCalendar";
 import { toast } from "sonner";
 
 const DAYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
