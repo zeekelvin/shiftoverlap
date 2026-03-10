@@ -136,3 +136,7 @@ function MatchesInner() {
     </div>
   );
 }
+
+export default function Matches() {
+  return <RequireAuth><MatchesInner /></RequireAuth>;
+}
