@@ -47,13 +47,52 @@ export default function Discover() {
     initialData: [],
   });
 
-  // Filter candidates
-  const candidates = allProfiles.filter((p) => {
-    if (p.user_email === currentUser?.email) return false;
-    const alreadySwiped = myMatches.some((m) => m.target_profile_id === p.id);
-    if (alreadySwiped) return false;
-    return true;
-  });
+  // --- Compatibility scoring ---
+  const computeCompatibility = (a, b) => {
+    // 1. Schedule overlap (0-100, weighted 60%)
+    let scheduleScore = 0;
+    const DAYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
+    const schA = a.weekly_schedule || {};
+    const schB = b.weekly_schedule || {};
+    let totalA = 0, overlapCount = 0;
+    DAYS.forEach((d) => {
+      const sA = schA[d] || [], sB = schB[d] || [];
+      totalA += sA.length;
+      overlapCount += sA.filter((s) => sB.includes(s)).length;
+    });
+    scheduleScore = totalA > 0 ? (overlapCount / totalA) * 100 : 0;
+
+    // 2. Gender preference match (binary, weighted 30%)
+    const prefScore = (() => {
+      if (!a.looking_for || !b.looking_for) return 50;
+      const aWantsB = a.looking_for === "everyone" || a.looking_for === b.gender;
+      const bWantsA = b.looking_for === "everyone" || b.looking_for === a.gender;
+      if (aWantsB && bWantsA) return 100;
+      if (aWantsB || bWantsA) return 50;
+      return 0;
+    })();
+
+    // 3. Shared interests (0-100, weighted 10%)
+    const interestScore = (() => {
+      const iA = a.interests || [], iB = b.interests || [];
+      if (!iA.length || !iB.length) return 50;
+      const shared = iA.filter((i) => iB.includes(i)).length;
+      return Math.min(100, (shared / Math.max(iA.length, iB.length)) * 100 * 2);
+    })();
+
+    return scheduleScore * 0.6 + prefScore * 0.3 + interestScore * 0.1;
+  };
+
+  // Filter and sort candidates by compatibility
+  const candidates = allProfiles
+    .filter((p) => {
+      if (p.user_email === currentUser?.email) return false;
+      const alreadySwiped = myMatches.some((m) => m.target_profile_id === p.id);
+      if (alreadySwiped) return false;
+      return true;
+    })
+    .map((p) => ({ ...p, _compat: myProfile ? computeCompatibility(myProfile, p) : 0 }))
+    .sort((a, b) => b._compat - a._compat);
 
   const currentCandidate = candidates[currentIndex];
 
