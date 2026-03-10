@@ -202,6 +202,7 @@ export default function Discover() {
                 onLike={() => handleSwipe("like")}
                 onPass={() => handleSwipe("pass")}
                 onSuperLike={() => handleSwipe("super_like")}
+                compatScore={currentCandidate._compat}
               />
             </motion.div>
           </AnimatePresence>
