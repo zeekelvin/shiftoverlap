@@ -206,7 +206,6 @@ function CouplesBanner() {
 }
 
 export default function Home() {
-  React.useEffect(() => { document.title = "ShiftOverlap"; }, []); {
   const navigate = useNavigate();
   const [isAuth, setIsAuth] = useState(null);
 
