@@ -12,7 +12,7 @@ import ProfileSetupSteps from "../components/profile/ProfileSetupSteps";
 import ProfileCard from "../components/discover/ProfileCard";
 import MatchPopup from "../components/discover/MatchPopup";
 
-export default function Discover() {
+function DiscoverInner() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [currentUser, setCurrentUser] = useState(null);
