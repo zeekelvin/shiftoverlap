@@ -56,6 +56,27 @@ export default function ProfileCard({ profile, mySchedule, onLike, onPass, onSup
             <p className="text-sm text-slate-600 leading-relaxed">{profile.bio}</p>
           )}
 
+          {/* Compatibility score pill */}
+          {compatScore != null && (
+            <div className="flex items-center gap-2">
+              <div className="flex-1 h-2 rounded-full bg-slate-100 overflow-hidden">
+                <div
+                  className={`h-full rounded-full transition-all ${
+                    compatScore >= 70 ? "bg-gradient-to-r from-green-400 to-emerald-500"
+                    : compatScore >= 40 ? "bg-gradient-to-r from-yellow-400 to-orange-400"
+                    : "bg-gradient-to-r from-red-300 to-rose-400"
+                  }`}
+                  style={{ width: `${Math.round(compatScore)}%` }}
+                />
+              </div>
+              <span className={`text-xs font-bold tabular-nums ${
+                compatScore >= 70 ? "text-green-600" : compatScore >= 40 ? "text-orange-500" : "text-rose-500"
+              }`}>
+                {Math.round(compatScore)}% match
+              </span>
+            </div>
+          )}
+
           {/* Schedule overlap */}
           {mySchedule && profile.weekly_schedule && (
             <div className="bg-slate-50 rounded-2xl p-4">
