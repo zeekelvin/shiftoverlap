@@ -6,7 +6,7 @@ import ProfessionBadge from "../shared/ProfessionBadge";
 import ShiftBadge from "../shared/ShiftBadge";
 import ScheduleOverlapIndicator from "../shared/ScheduleOverlapIndicator";
 
-export default function ProfileCard({ profile, mySchedule, onLike, onPass, onSuperLike }) {
+export default function ProfileCard({ profile, mySchedule, onLike, onPass, onSuperLike, compatScore }) {
   const navigate = useNavigate();
   return (
     <div className="relative w-full max-w-sm mx-auto">
