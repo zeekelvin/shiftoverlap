@@ -15,10 +15,52 @@ const PAGES_WITHOUT_NAV = ["Home"];
 
 export default function Layout({ children, currentPageName }) {
   const [isAuth, setIsAuth] = useState(false);
+  const [currentEmail, setCurrentEmail] = useState(null);
+  const [hasUnread, setHasUnread] = useState(false);
 
   useEffect(() => {
-    base44.auth.isAuthenticated().then(setIsAuth);
+    base44.auth.isAuthenticated().then((auth) => {
+      setIsAuth(auth);
+      if (auth) {
+        base44.auth.me().then((user) => setCurrentEmail(user?.email));
+      }
+    });
   }, []);
+
+  // Real-time unread badge
+  useEffect(() => {
+    if (!currentEmail) return;
+
+    // Initial check
+    const checkUnread = async () => {
+      const convs = await base44.entities.Conversation.list();
+      const myConvs = convs.filter((c) => c.participant_emails?.includes(currentEmail));
+      if (!myConvs.length) return;
+      const results = await Promise.all(
+        myConvs.map((conv) =>
+          base44.entities.Message.filter({ conversation_id: conv.id, is_read: false })
+        )
+      );
+      const anyUnread = results.flat().some((m) => m.sender_email !== currentEmail);
+      setHasUnread(anyUnread);
+    };
+    checkUnread();
+
+    // Subscribe for live updates
+    const unsubscribe = base44.entities.Message.subscribe((event) => {
+      if (event.type === "create" && event.data?.sender_email !== currentEmail && !event.data?.is_read) {
+        setHasUnread(true);
+      }
+    });
+    return unsubscribe;
+  }, [currentEmail]);
+
+  // Clear unread dot when visiting Messages page
+  useEffect(() => {
+    if (currentPageName === "Messages") {
+      setHasUnread(false);
+    }
+  }, [currentPageName]);
 
   const showNav = isAuth && !PAGES_WITHOUT_NAV.includes(currentPageName);
 
@@ -31,17 +73,21 @@ export default function Layout({ children, currentPageName }) {
           <div className="max-w-lg mx-auto flex items-center justify-around py-2">
             {NAV_ITEMS.map((item) => {
               const isActive = currentPageName === item.name;
+              const showBadge = item.name === "Messages" && hasUnread;
               return (
                 <Link
                   key={item.name}
                   to={createPageUrl(item.name)}
-                  className={`flex flex-col items-center gap-0.5 px-4 py-1.5 rounded-xl transition-colors ${
-                    isActive
-                      ? "text-[#FF6B35]"
-                      : "text-slate-400 hover:text-slate-600"
+                  className={`relative flex flex-col items-center gap-0.5 px-4 py-1.5 rounded-xl transition-colors ${
+                    isActive ? "text-[#FF6B35]" : "text-slate-400 hover:text-slate-600"
                   }`}
                 >
-                  <item.icon className={`w-5 h-5 ${isActive ? "stroke-[2.5px]" : ""}`} />
+                  <div className="relative">
+                    <item.icon className={`w-5 h-5 ${isActive ? "stroke-[2.5px]" : ""}`} />
+                    {showBadge && (
+                      <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-[#FF6B35] rounded-full border-2 border-white" />
+                    )}
+                  </div>
                   <span className="text-[10px] font-medium">{item.label}</span>
                 </Link>
               );
