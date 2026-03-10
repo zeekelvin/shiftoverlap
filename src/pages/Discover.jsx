@@ -228,6 +228,5 @@ function DiscoverInner() {
   );
 }
 
-export default function Discover() {
-  return <RequireAuth><DiscoverInner /></RequireAuth>;
-}
+const Discover = () => <RequireAuth><DiscoverInner /></RequireAuth>;
+export default Discover;
