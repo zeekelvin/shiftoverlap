@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import RequireAuth from "../components/shared/RequireAuth";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
