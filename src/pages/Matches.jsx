@@ -137,6 +137,5 @@ function MatchesInner() {
   );
 }
 
-export default function Matches() {
-  return <RequireAuth><MatchesInner /></RequireAuth>;
-}
+const Matches = () => <RequireAuth><MatchesInner /></RequireAuth>;
+export default Matches;
