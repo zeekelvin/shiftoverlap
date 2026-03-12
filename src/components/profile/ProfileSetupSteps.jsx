@@ -75,11 +75,18 @@ export default function ProfileSetupSteps({ onComplete }) {
     });
   };
 
-  const handlePhotoUpload = async (e) => {
+  const handlePhotoUpload = async (e, replaceIdx = null) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const { file_url } = await base44.integrations.Core.UploadFile({ file });
-    setForm((f) => ({ ...f, photo_urls: [...f.photo_urls, file_url] }));
+    setForm((f) => {
+      if (replaceIdx !== null) {
+        const updated = [...f.photo_urls];
+        updated[replaceIdx] = file_url;
+        return { ...f, photo_urls: updated };
+      }
+      return { ...f, photo_urls: [...f.photo_urls, file_url] };
+    });
   };
 
   const removePhoto = (idx) => {
