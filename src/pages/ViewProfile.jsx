@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { Loader2, ArrowLeft, MapPin, Heart, MessageCircle } from "lucide-react";
+import { Loader2, ArrowLeft, MapPin, Heart, MessageCircle, ThumbsUp, Star, X, ShieldAlert } from "lucide-react";
 import { createPageUrl } from "@/utils";
 import { useNavigate } from "react-router-dom";
 import ProfessionBadge from "../components/shared/ProfessionBadge";
