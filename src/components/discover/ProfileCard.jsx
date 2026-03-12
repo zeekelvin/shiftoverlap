@@ -1,36 +1,99 @@
-import React from "react";
-import { MapPin, ChevronRight } from "lucide-react";
+import React, { useState } from "react";
+import { MapPin, ChevronRight, X, Heart, Star, Zap, ThumbsUp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
+import { motion, useMotionValue, useTransform, useAnimation } from "framer-motion";
 import ProfessionBadge from "../shared/ProfessionBadge";
 import ShiftBadge from "../shared/ShiftBadge";
 import ScheduleOverlapIndicator from "../shared/ScheduleOverlapIndicator";
 
-export default function ProfileCard({ profile, mySchedule, onLike, onPass, onSuperLike, compatScore }) {
+export default function ProfileCard({ profile, mySchedule, onLike, onPass, onSuperLike, onInterested, compatScore }) {
   const navigate = useNavigate();
+  const [activePhoto, setActivePhoto] = useState(0);
+  const photos = profile.photo_urls?.length ? profile.photo_urls : [];
+
+  const x = useMotionValue(0);
+  const controls = useAnimation();
+  const rotate = useTransform(x, [-200, 200], [-18, 18]);
+  const likeOpacity = useTransform(x, [20, 100], [0, 1]);
+  const passOpacity = useTransform(x, [-100, -20], [1, 0]);
+
+  const handleDragEnd = async (_, info) => {
+    const threshold = 100;
+    if (info.offset.x > threshold) {
+      await controls.start({ x: 600, opacity: 0, transition: { duration: 0.3 } });
+      onLike?.();
+    } else if (info.offset.x < -threshold) {
+      await controls.start({ x: -600, opacity: 0, transition: { duration: 0.3 } });
+      onPass?.();
+    } else {
+      controls.start({ x: 0, rotate: 0, transition: { type: "spring", stiffness: 300, damping: 20 } });
+    }
+  };
+
   return (
-    <div className="relative w-full max-w-sm mx-auto">
-      {/* Card */}
-      <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100">
+    <div className="relative w-full max-w-sm mx-auto select-none">
+      {/* Drag indicators */}
+      <motion.div
+        className="absolute top-8 left-4 z-20 px-4 py-2 rounded-xl border-4 border-green-500 text-green-500 font-black text-xl rotate-[-15deg] pointer-events-none"
+        style={{ opacity: likeOpacity }}
+      >
+        LIKE ❤️
+      </motion.div>
+      <motion.div
+        className="absolute top-8 right-4 z-20 px-4 py-2 rounded-xl border-4 border-red-500 text-red-500 font-black text-xl rotate-[15deg] pointer-events-none"
+        style={{ opacity: passOpacity }}
+      >
+        NOPE ✗
+      </motion.div>
+
+      {/* Draggable Card */}
+      <motion.div
+        drag="x"
+        dragConstraints={{ left: 0, right: 0 }}
+        style={{ x, rotate }}
+        animate={controls}
+        onDragEnd={handleDragEnd}
+        className="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100 cursor-grab active:cursor-grabbing"
+      >
         {/* Photo */}
         <div className="relative aspect-[3/4] overflow-hidden">
-          {profile.photo_urls?.[0] ? (
-            <img
-              src={profile.photo_urls[0]}
-              alt={profile.display_name}
-              className="w-full h-full object-cover"
-            />
+          {photos.length > 0 ? (
+            <>
+              <img
+                src={photos[activePhoto]}
+                alt={profile.display_name}
+                className="w-full h-full object-cover"
+                draggable={false}
+              />
+              {/* Photo nav dots */}
+              {photos.length > 1 && (
+                <div className="absolute top-0 left-0 right-0 flex gap-1 p-2">
+                  {photos.map((_, i) => (
+                    <button
+                      key={i}
+                      onPointerDown={(e) => { e.stopPropagation(); setActivePhoto(i); }}
+                      className={`flex-1 h-1 rounded-full transition-all ${i === activePhoto ? "bg-white" : "bg-white/40"}`}
+                    />
+                  ))}
+                </div>
+              )}
+              {/* tap zones */}
+              <div className="absolute inset-0 flex pointer-events-none">
+                <div className="w-1/3 h-full pointer-events-auto" onPointerDown={(e) => { e.stopPropagation(); setActivePhoto(i => Math.max(0, i - 1)); }} />
+                <div className="w-2/3 h-full" />
+                <div className="w-1/3 h-full pointer-events-auto" onPointerDown={(e) => { e.stopPropagation(); setActivePhoto(i => Math.min(photos.length - 1, i + 1)); }} />
+              </div>
+            </>
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-[#FF6B35] to-[#1B2A4A] flex items-center justify-center">
               <span className="text-7xl font-bold text-white/30">{profile.display_name?.[0]?.toUpperCase()}</span>
             </div>
           )}
 
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
 
-          {/* Name & basic info */}
-          <div className="absolute bottom-0 left-0 right-0 p-5">
+          <div className="absolute bottom-0 left-0 right-0 p-5 pointer-events-none">
             <h2 className="text-2xl font-bold text-white">
               {profile.display_name}{profile.age ? `, ${profile.age}` : ""}
             </h2>
@@ -43,20 +106,17 @@ export default function ProfileCard({ profile, mySchedule, onLike, onPass, onSup
           </div>
         </div>
 
-        {/* Info section */}
+        {/* Info */}
         <div className="p-5 space-y-4">
-          {/* Badges */}
           <div className="flex flex-wrap gap-2">
             {profile.profession && <ProfessionBadge profession={profile.profession} />}
             {profile.shift_pattern && <ShiftBadge shiftPattern={profile.shift_pattern} />}
           </div>
 
-          {/* Bio */}
           {profile.bio && (
-            <p className="text-sm text-slate-600 leading-relaxed">{profile.bio}</p>
+            <p className="text-sm text-slate-600 leading-relaxed line-clamp-2">{profile.bio}</p>
           )}
 
-          {/* Compatibility score pill */}
           {compatScore != null && (
             <div className="flex items-center gap-2">
               <div className="flex-1 h-2 rounded-full bg-slate-100 overflow-hidden">
@@ -77,66 +137,73 @@ export default function ProfileCard({ profile, mySchedule, onLike, onPass, onSup
             </div>
           )}
 
-          {/* Schedule overlap */}
           {mySchedule && profile.weekly_schedule && (
             <div className="bg-slate-50 rounded-2xl p-4">
-              <ScheduleOverlapIndicator mySchedule={mySchedule} theirSchedule={profile.weekly_schedule} />
+              <ScheduleOverlapIndicator mySchedule={mySchedule} theirSchedule={profile.weekly_schedule} compact />
             </div>
           )}
 
-          {/* Interests */}
           {profile.interests?.length > 0 && (
             <div className="flex flex-wrap gap-1.5">
-              {profile.interests.map((interest) => (
-                <span
-                  key={interest}
-                  className="text-xs px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 font-medium"
-                >
+              {profile.interests.slice(0, 6).map((interest) => (
+                <span key={interest} className="text-xs px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 font-medium">
                   {interest}
                 </span>
               ))}
             </div>
           )}
 
-          {/* View full profile */}
           <button
+            onPointerDown={(e) => e.stopPropagation()}
             onClick={() => navigate(createPageUrl(`ViewProfile?id=${profile.id}`))}
             className="w-full flex items-center justify-center gap-1 text-xs text-[#FF6B35] font-semibold py-1 hover:underline"
           >
             View full profile <ChevronRight className="w-3.5 h-3.5" />
           </button>
         </div>
-      </div>
+      </motion.div>
 
       {/* Action buttons */}
-      <div className="flex items-center justify-center gap-4 mt-5">
+      <div className="flex items-center justify-center gap-3 mt-5">
+        {/* Pass */}
         <button
           onClick={onPass}
-          className="w-14 h-14 rounded-full bg-white shadow-lg border border-slate-200 flex items-center justify-center text-slate-400 hover:text-red-500 hover:border-red-200 hover:shadow-red-100 transition-all active:scale-90"
+          className="w-14 h-14 rounded-full bg-white shadow-lg border border-slate-200 flex items-center justify-center text-slate-400 hover:text-red-500 hover:border-red-200 transition-all active:scale-90"
+          title="Pass"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          <X className="w-6 h-6" />
         </button>
 
+        {/* Interested */}
+        <button
+          onClick={onInterested}
+          className="w-12 h-12 rounded-full bg-white shadow-lg border border-slate-200 flex items-center justify-center text-slate-400 hover:text-indigo-500 hover:border-indigo-200 transition-all active:scale-90"
+          title="Interested"
+        >
+          <ThumbsUp className="w-5 h-5" />
+        </button>
+
+        {/* Super Like */}
         <button
           onClick={onSuperLike}
-          className="w-12 h-12 rounded-full bg-white shadow-lg border border-slate-200 flex items-center justify-center text-slate-400 hover:text-blue-500 hover:border-blue-200 hover:shadow-blue-100 transition-all active:scale-90"
+          className="w-12 h-12 rounded-full bg-white shadow-lg border border-slate-200 flex items-center justify-center text-slate-400 hover:text-blue-500 hover:border-blue-200 transition-all active:scale-90"
+          title="Super Like"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-          </svg>
+          <Star className="w-5 h-5" />
         </button>
 
+        {/* Like */}
         <button
           onClick={onLike}
-          className="w-14 h-14 rounded-full bg-gradient-to-r from-[#FF6B35] to-[#FF8F5E] shadow-lg shadow-orange-200 flex items-center justify-center text-white hover:shadow-xl hover:shadow-orange-300 transition-all active:scale-90"
+          className="w-14 h-14 rounded-full bg-gradient-to-r from-[#FF6B35] to-[#FF8F5E] shadow-lg shadow-orange-200 flex items-center justify-center text-white hover:shadow-xl transition-all active:scale-90"
+          title="Like"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-          </svg>
+          <Heart className="w-6 h-6 fill-white" />
         </button>
       </div>
+
+      {/* Swipe hint */}
+      <p className="text-center text-xs text-slate-300 mt-3">← Swipe left to pass · Swipe right to like →</p>
     </div>
   );
 }
