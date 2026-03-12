@@ -338,7 +338,7 @@ export default function ProfileSetupSteps({ onComplete }) {
       </div>
 
       {/* Bottom nav */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-lg border-t border-slate-100 p-4">
+      <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-slate-100 p-4 z-50">
         <div className="max-w-lg mx-auto flex gap-3">
           {step > 0 && (
             <Button variant="outline" onClick={() => setStep((s) => s - 1)} className="flex-1">
