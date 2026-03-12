@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
-import { Search, Heart, MessageCircle, User } from "lucide-react";
+import { Search, Heart, MessageCircle, User, Home } from "lucide-react";
 
 const NAV_ITEMS = [
   { name: "Discover", icon: Search, label: "Discover" },
