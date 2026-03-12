@@ -12,7 +12,7 @@ const NAV_ITEMS = [
   { name: "MyProfile", icon: User, label: "Profile" },
 ];
 
-const PAGES_WITHOUT_NAV = ["Home"];
+const PAGES_WITHOUT_NAV = [];
 
 export default function Layout({ children, currentPageName }) {
   React.useEffect(() => { document.title = "ShiftOverlap"; }, []);
