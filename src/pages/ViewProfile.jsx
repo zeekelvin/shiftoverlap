@@ -54,6 +54,33 @@ export default function ViewProfile() {
   const overlapPct = myProfile && profile ? computeOverlap(myProfile.weekly_schedule, profile.weekly_schedule) : null;
   const photos = profile.photo_urls?.length ? profile.photo_urls : [];
 
+  const handleAction = async (action) => {
+    if (!currentUser?.email || !profile) return;
+    // Check if already swiped
+    const existing = await base44.entities.Match.filter({ user_email: currentUser.email, target_profile_id: profile.id });
+    if (existing.length > 0) {
+      await base44.entities.Match.update(existing[0].id, { action });
+    } else {
+      await base44.entities.Match.create({
+        user_email: currentUser.email,
+        target_profile_id: profile.id,
+        target_email: profile.user_email,
+        action,
+      });
+    }
+    // Check mutual
+    if (["like", "super_like", "interested"].includes(action)) {
+      const theirSwipes = await base44.entities.Match.filter({ user_email: profile.user_email, target_email: currentUser.email });
+      const theyLike = theirSwipes.some((s) => ["like", "super_like", "interested"].includes(s.action));
+      if (theyLike) {
+        // Create conversation if not exists
+        await handleMessage();
+        return;
+      }
+    }
+    navigate(-1);
+  };
+
   const handleMessage = async () => {
     if (!currentUser?.email || !profile.user_email) return;
     // Find existing conversation or create one
