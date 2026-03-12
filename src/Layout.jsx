@@ -64,7 +64,7 @@ export default function Layout({ children, currentPageName }) {
     }
   }, [currentPageName]);
 
-  const showNav = isAuth && !PAGES_WITHOUT_NAV.includes(currentPageName) && currentPageName !== "Home";
+  const showNav = isAuth && currentPageName !== "Home";
 
   return (
     <div className="min-h-screen bg-white">
