@@ -333,19 +333,26 @@ export default function ProfileSetupSteps({ onComplete }) {
                   {form.photo_urls.map((url, i) => (
                     <div key={i} className="relative aspect-square rounded-2xl overflow-hidden group">
                       <img src={url} alt="" className="w-full h-full object-cover" />
-                      <button
-                        onClick={() => removePhoto(i)}
-                        className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                        <label className="cursor-pointer bg-white/90 rounded-full p-1.5 hover:bg-white transition-colors" title="Replace photo">
+                          <RefreshCw className="w-3.5 h-3.5 text-slate-700" />
+                          <input type="file" accept="image/*" className="hidden" onChange={(e) => handlePhotoUpload(e, i)} />
+                        </label>
+                        <button
+                          onClick={() => removePhoto(i)}
+                          className="bg-white/90 rounded-full p-1.5 hover:bg-white transition-colors"
+                          title="Remove photo"
+                        >
+                          <X className="w-3.5 h-3.5 text-slate-700" />
+                        </button>
+                      </div>
                     </div>
                   ))}
                   {form.photo_urls.length < 6 && (
                     <label className="aspect-square rounded-2xl border-2 border-dashed border-slate-300 flex flex-col items-center justify-center cursor-pointer hover:border-[#FF6B35] hover:bg-orange-50 transition-colors">
                       <Camera className="w-6 h-6 text-slate-400" />
                       <span className="text-xs text-slate-400 mt-1">Add</span>
-                      <input type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} />
+                      <input type="file" accept="image/*" className="hidden" onChange={(e) => handlePhotoUpload(e)} />
                     </label>
                   )}
                 </div>
