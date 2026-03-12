@@ -118,8 +118,16 @@ export default function ProfileSetupSteps({ onComplete }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-orange-50 flex flex-col">
       {/* Header */}
-      <div className="p-6 flex justify-center">
+      <div className="p-6 flex items-center justify-between max-w-lg mx-auto w-full">
+        <button
+          onClick={() => navigate(createPageUrl("Home"))}
+          className="flex items-center gap-1.5 text-sm text-slate-400 hover:text-[#FF6B35] transition-colors"
+        >
+          <Home className="w-4 h-4" />
+          <span>Home</span>
+        </button>
         <LogoBrand size="md" />
+        <div className="w-16" />
       </div>
 
       {/* Progress */}
