@@ -72,10 +72,7 @@ export default function Layout({ children, currentPageName }) {
       {showNav && (
         <nav className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-slate-100 z-40 safe-area-bottom">
           <div className="max-w-lg mx-auto flex items-center justify-around py-2">
-            <Link to={createPageUrl("Home")} className="flex items-center px-2 py-1.5">
-              <span className="text-xs font-medium text-slate-400 hover:text-[#FF6B35] transition-colors">Home</span>
-            </Link>
-          {NAV_ITEMS.map((item) => {
+            {NAV_ITEMS.map((item) => {
               const isActive = currentPageName === item.name;
               const showBadge = item.name === "Messages" && hasUnread;
               return (
