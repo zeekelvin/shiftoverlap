@@ -52,6 +52,7 @@ import Home from './pages/Home';
 import Messages from './pages/Messages';
 import MyProfile from './pages/MyProfile';
 import ViewProfile from './pages/ViewProfile';
+import Matches from './pages/Matches';
 import __Layout from './Layout.jsx';
 
 
@@ -61,6 +62,7 @@ export const PAGES = {
     "Messages": Messages,
     "MyProfile": MyProfile,
     "ViewProfile": ViewProfile,
+    "Matches": Matches,
 }
 
 export const pagesConfig = {
