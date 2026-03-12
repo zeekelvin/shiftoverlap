@@ -247,27 +247,48 @@ export default function ViewProfile() {
 
       {/* Action buttons (fixed bottom, only for other profiles) */}
       {!isOwnProfile && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-slate-100 p-4 safe-area-bottom">
-          <div className="max-w-lg mx-auto flex gap-3">
-            <Button
-              variant="outline"
-              className="flex-1 h-12 rounded-xl border-slate-200 text-slate-500"
-              onClick={() => navigate(-1)}
+        <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-slate-100 p-4 safe-area-bottom z-40">
+          <div className="max-w-lg mx-auto grid grid-cols-5 gap-2">
+            <button
+              onClick={() => handleAction("pass")}
+              className="flex flex-col items-center justify-center h-14 rounded-xl border border-slate-200 text-slate-400 hover:text-red-500 hover:border-red-200 bg-white transition-all"
+              title="Pass"
             >
-              Pass
-            </Button>
-            <Button
-              variant="outline"
-              className="h-12 px-4 rounded-xl border-[#FF6B35] text-[#FF6B35] hover:bg-orange-50"
+              <X className="w-5 h-5" />
+              <span className="text-[10px] mt-0.5">Pass</span>
+            </button>
+            <button
+              onClick={() => handleAction("interested")}
+              className="flex flex-col items-center justify-center h-14 rounded-xl border border-slate-200 text-slate-400 hover:text-indigo-500 hover:border-indigo-200 bg-white transition-all"
+              title="Interested"
+            >
+              <ThumbsUp className="w-5 h-5" />
+              <span className="text-[10px] mt-0.5">Interested</span>
+            </button>
+            <button
               onClick={handleMessage}
+              className="flex flex-col items-center justify-center h-14 rounded-xl border border-[#FF6B35] text-[#FF6B35] hover:bg-orange-50 bg-white transition-all"
+              title="Message"
             >
-              <MessageCircle className="w-4 h-4" />
-            </Button>
-            <Button
-              className="flex-1 h-12 rounded-xl bg-gradient-to-r from-[#FF6B35] to-[#FF8F5E] text-white font-bold shadow-lg shadow-orange-200"
+              <MessageCircle className="w-5 h-5" />
+              <span className="text-[10px] mt-0.5">Chat</span>
+            </button>
+            <button
+              onClick={() => handleAction("super_like")}
+              className="flex flex-col items-center justify-center h-14 rounded-xl border border-slate-200 text-slate-400 hover:text-blue-500 hover:border-blue-200 bg-white transition-all"
+              title="Super Like"
             >
-              <Heart className="w-4 h-4 mr-2" /> Like
-            </Button>
+              <Star className="w-5 h-5" />
+              <span className="text-[10px] mt-0.5">Super</span>
+            </button>
+            <button
+              onClick={() => handleAction("like")}
+              className="flex flex-col items-center justify-center h-14 rounded-xl bg-gradient-to-r from-[#FF6B35] to-[#FF8F5E] text-white shadow-lg shadow-orange-200 transition-all"
+              title="Like"
+            >
+              <Heart className="w-5 h-5 fill-white" />
+              <span className="text-[10px] mt-0.5 font-bold">Like</span>
+            </button>
           </div>
         </div>
       )}
