@@ -203,6 +203,7 @@ function DiscoverInner() {
                 onLike={() => handleSwipe("like")}
                 onPass={() => handleSwipe("pass")}
                 onSuperLike={() => handleSwipe("super_like")}
+                onInterested={() => handleSwipe("interested")}
                 compatScore={currentCandidate._compat}
               />
             </motion.div>
