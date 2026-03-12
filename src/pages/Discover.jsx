@@ -108,12 +108,12 @@ function DiscoverInner() {
       });
 
       // Check if they already liked me
-      if (action === "like" || action === "super_like") {
+      if (action === "like" || action === "super_like" || action === "interested") {
         const theirSwipes = await base44.entities.Match.filter({
           user_email: profile.user_email,
           target_email: currentUser.email,
         });
-        const theyLikedMe = theirSwipes.some((s) => s.action === "like" || s.action === "super_like");
+        const theyLikedMe = theirSwipes.some((s) => ["like", "super_like", "interested"].includes(s.action));
 
         if (theyLikedMe) {
           // Mutual match!
