@@ -5,6 +5,7 @@ import { base44 } from "@/api/base44Client";
 import { Search, Heart, MessageCircle, User, Home } from "lucide-react";
 
 const NAV_ITEMS = [
+  { name: "Home", icon: Home, label: "Home" },
   { name: "Discover", icon: Search, label: "Discover" },
   { name: "Matches", icon: Heart, label: "Matches" },
   { name: "Messages", icon: MessageCircle, label: "Messages" },
