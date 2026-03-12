@@ -32,6 +32,7 @@ const INTERESTS = [
 const STEPS = ["Basics", "Career", "Schedule", "Interests", "Photos"];
 
 export default function ProfileSetupSteps({ onComplete }) {
+  const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({
