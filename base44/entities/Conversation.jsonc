@@ -1,0 +1,33 @@
+{
+  "name": "Conversation",
+  "type": "object",
+  "properties": {
+    "participant_emails": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Emails of both participants"
+    },
+    "match_id": {
+      "type": "string",
+      "description": "ID of the mutual match"
+    },
+    "last_message": {
+      "type": "string",
+      "description": "Preview of the last message"
+    },
+    "last_message_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the last message was sent"
+    },
+    "last_message_by": {
+      "type": "string",
+      "description": "Email of who sent the last message"
+    }
+  },
+  "required": [
+    "participant_emails"
+  ]
+}

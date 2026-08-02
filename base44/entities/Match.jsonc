@@ -1,0 +1,39 @@
+{
+  "name": "Match",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "The user who performed the action"
+    },
+    "target_profile_id": {
+      "type": "string",
+      "description": "ID of the profile they liked/passed"
+    },
+    "target_email": {
+      "type": "string",
+      "description": "Email of the target user"
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "like",
+        "pass",
+        "super_like",
+        "interested",
+        "block"
+      ],
+      "description": "The action taken"
+    },
+    "is_mutual": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the match is mutual (both liked)"
+    }
+  },
+  "required": [
+    "user_email",
+    "target_profile_id",
+    "action"
+  ]
+}

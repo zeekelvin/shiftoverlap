@@ -1,0 +1,130 @@
+{
+  "name": "Profile",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "Email of the user who owns this profile"
+    },
+    "display_name": {
+      "type": "string",
+      "description": "Display name"
+    },
+    "age": {
+      "type": "number",
+      "description": "Age of the user"
+    },
+    "gender": {
+      "type": "string",
+      "enum": [
+        "male",
+        "female",
+        "non_binary",
+        "other"
+      ],
+      "description": "Gender"
+    },
+    "looking_for": {
+      "type": "string",
+      "enum": [
+        "male",
+        "female",
+        "everyone"
+      ],
+      "description": "Who they are looking for"
+    },
+    "profession": {
+      "type": "string",
+      "enum": [
+        "nurse",
+        "doctor",
+        "emt_paramedic",
+        "firefighter",
+        "police_officer",
+        "dispatcher",
+        "security",
+        "factory_worker",
+        "pilot_flight_crew",
+        "truck_driver",
+        "hotel_hospitality",
+        "restaurant_bar",
+        "retail",
+        "warehouse",
+        "military",
+        "corrections_officer",
+        "home_health_aide",
+        "other"
+      ],
+      "description": "Their shift-work profession"
+    },
+    "profession_detail": {
+      "type": "string",
+      "description": "More detail about their role"
+    },
+    "bio": {
+      "type": "string",
+      "description": "Short bio about themselves"
+    },
+    "photo_urls": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Profile photo URLs"
+    },
+    "city": {
+      "type": "string",
+      "description": "City they live in"
+    },
+    "state": {
+      "type": "string",
+      "description": "State"
+    },
+    "interests": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of interests/hobbies"
+    },
+    "shift_pattern": {
+      "type": "string",
+      "enum": [
+        "rotating",
+        "fixed_days",
+        "fixed_nights",
+        "fixed_evenings",
+        "12_hour_rotating",
+        "24_on_48_off",
+        "48_on_96_off",
+        "on_call",
+        "split_shift",
+        "irregular_freelance"
+      ],
+      "description": "Type of shift pattern"
+    },
+    "weekly_schedule": {
+      "type": "object",
+      "description": "Weekly availability - keys are days (mon, tue, etc.), values are arrays of available time blocks like ['morning', 'afternoon', 'evening', 'night']"
+    },
+    "subscription_tier": {
+      "type": "string",
+      "enum": [
+        "free",
+        "plus",
+        "pro"
+      ],
+      "default": "free",
+      "description": "Subscription tier"
+    },
+    "is_complete": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether profile setup is complete"
+    }
+  },
+  "required": [
+    "user_email",
+    "display_name"
+  ]
+}
